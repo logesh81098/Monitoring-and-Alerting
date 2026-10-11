@@ -59,6 +59,10 @@ resource "aws_route_table" "monitoring-public-routetable" {
 
 resource "aws_route_table" "monitoring-private-route-table" {
   vpc_id = aws_vpc.monitoring-vpc.id
+  route {
+    gateway_id = aws_nat_gateway.monitoring-nat.id
+    cidr_block = var.anywhere-cidr
+  }
   tags = {
     Name = "Monitoring and Alerting Private Route Table"
     IAC = "Terraform"
@@ -89,6 +93,26 @@ resource "aws_internet_gateway" "monitoring-igw" {
   vpc_id = aws_vpc.monitoring-vpc.id
   tags = {
     Name = "Monitoring and Alerting IGW"
+    IAC = "Terraform"
+  }
+}
+
+##############################################################################################################################
+#                                            VPC NAT Gateway
+##############################################################################################################################
+
+resource "aws_eip" "elastic-ip-1" {
+  tags = {
+    Name = "NAT-Gateway-elastic-ip"
+    IAC = "Terraform"
+  }
+}
+
+resource "aws_nat_gateway" "monitoring-nat" {
+  allocation_id = aws_eip.elastic-ip-1.id
+  subnet_id = aws_subnet.monitoring-public-subnet.id
+  tags = {
+    Name = "Monitoring and Alerting NAT Gateway"
     IAC = "Terraform"
   }
 }
