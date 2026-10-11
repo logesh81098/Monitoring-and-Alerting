@@ -47,6 +47,10 @@ resource "aws_subnet" "monitoring-private-subnet" {
 
 resource "aws_route_table" "monitoring-public-routetable" {
   vpc_id = aws_vpc.monitoring-vpc.id
+  route {
+    gateway_id = aws_internet_gateway.monitoring-igw.id
+    cidr_block = var.anywhere-cidr
+  }
   tags = {
     Name = "Monitoring and Alerting Public Route Table"
     IAC = "Terraform"
@@ -74,4 +78,17 @@ resource "aws_route_table_association" "public-rt" {
 resource "aws_route_table_association" "private-rt" {
   route_table_id = aws_route_table.monitoring-private-route-table.id
   subnet_id = aws_subnet.monitoring-private-subnet.id
+}
+
+
+##############################################################################################################################
+#                                           VPC Internet Gateway
+##############################################################################################################################
+
+resource "aws_internet_gateway" "monitoring-igw" {
+  vpc_id = aws_vpc.monitoring-vpc.id
+  tags = {
+    Name = "Monitoring and Alerting IGW"
+    IAC = "Terraform"
+  }
 }

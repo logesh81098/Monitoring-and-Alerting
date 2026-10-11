@@ -17,3 +17,7 @@ variable "private-subnet-cidr" {
 variable "private-subnet-az" {
   default = "ap-south-1a"
 }
+
+variable "anywhere-cidr" {
+  default = "0.0.0.0/0"
+}
