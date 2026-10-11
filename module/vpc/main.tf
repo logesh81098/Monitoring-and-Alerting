@@ -1,5 +1,5 @@
 ##############################################################################################################################
-#                                             VPC
+#                                                VPC
 ##############################################################################################################################
 
 resource "aws_vpc" "monitoring-vpc" {
@@ -13,12 +13,14 @@ resource "aws_vpc" "monitoring-vpc" {
 }
 
 
+
 ##############################################################################################################################
-#                                           VPC Subnets
+#                                             VPC Subnets
 ##############################################################################################################################
 
 resource "aws_subnet" "monitoring-public-subnet" {
     vpc_id = aws_vpc.monitoring-vpc.id
+    map_public_ip_on_launch = true
     cidr_block = var.public-subnet-cidr
     availability_zone = var.public-subnet-az
     tags = {
@@ -35,4 +37,41 @@ resource "aws_subnet" "monitoring-private-subnet" {
         Name = "Monitoring and Alerting Private Subnet"
         IAC = "Terraform"
     }
+}
+
+
+
+##############################################################################################################################
+#                                             VPC Route Tables
+##############################################################################################################################
+
+resource "aws_route_table" "monitoring-public-routetable" {
+  vpc_id = aws_vpc.monitoring-vpc.id
+  tags = {
+    Name = "Monitoring and Alerting Public Route Table"
+    IAC = "Terraform"
+  }
+}
+
+resource "aws_route_table" "monitoring-private-route-table" {
+  vpc_id = aws_vpc.monitoring-vpc.id
+  tags = {
+    Name = "Monitoring and Alerting Private Route Table"
+    IAC = "Terraform"
+  }
+}
+
+
+##############################################################################################################################
+#                                        VPC Route Tables Association
+##############################################################################################################################
+
+resource "aws_route_table_association" "public-rt" {
+  route_table_id = aws_route_table.monitoring-public-routetable.id
+  subnet_id = aws_subnet.monitoring-public-subnet.id
+}
+
+resource "aws_route_table_association" "private-rt" {
+  route_table_id = aws_route_table.monitoring-private-route-table.id
+  subnet_id = aws_subnet.monitoring-private-subnet.id
 }
