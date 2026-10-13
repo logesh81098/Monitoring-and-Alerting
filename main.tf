@@ -5,6 +5,9 @@ module "vpc" {
 module "ec2-instance" {
   source    = "./module/ec2-instance"
   subnet-id = module.vpc.private-subnet-id
+  monitoring-and-alerting-sg = module.security-groups.monitoring-and-alerting-sg-id
+  monitoring-and-alerting-keyname = module.key-pair.monitoring-and-alerting-keyname
+  monitoring-and-alerting-instance-profile = module.iam.monitoring-and-alerting-instance-profile
 }
 
 module "security-groups" {

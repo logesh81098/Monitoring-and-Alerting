@@ -9,3 +9,15 @@ variable "instance-type" {
 variable "subnet-id" {
   default = {}
 }
+
+variable "monitoring-and-alerting-sg" {
+  default = {}
+}
+
+variable "monitoring-and-alerting-keyname" {
+  default = {}
+}
+
+variable "monitoring-and-alerting-instance-profile" {
+  default = {}
+}
