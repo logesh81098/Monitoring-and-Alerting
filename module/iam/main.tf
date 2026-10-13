@@ -30,9 +30,6 @@ resource "aws_iam_role" "monitoring-alerting-iam-role" {
 #                                                IAM Policy
 ##############################################################################################################################
 
-#[Note:Grafana collects metrics from AWS Cloud using AWS API in CloudWatch]
-
-
 resource "aws_iam_policy" "monitoring-alerting-iam-policy" {
   name = "Monitoring-and-Alerting-IAM-Policy"
   description = "IAM Policy for Monitoring and Alerting server to grap CPU, Memory Utilizations from multiple servers"
@@ -72,4 +69,24 @@ resource "aws_iam_policy" "monitoring-alerting-iam-policy" {
     Name = "Monitoring-and-Alerting-IAM-Policy"
     IAC = "Terraform"
   }
+}
+
+
+##############################################################################################################################
+#                                       IAM Role Policy Attachment
+##############################################################################################################################
+
+resource "aws_iam_role_policy_attachment" "monitoring-alerting-role-policy" {
+  role = aws_iam_role.monitoring-alerting-iam-role.id
+  policy_arn = aws_iam_policy.monitoring-alerting-iam-policy.arn
+}
+
+
+##############################################################################################################################
+#                                         IAM Instant Role
+##############################################################################################################################
+
+resource "aws_iam_instance_profile" "monitoring-server-role" {
+  role = aws_iam_role.monitoring-alerting-iam-role.id
+  name = "Monitoring-and-alerting-server-role"
 }
