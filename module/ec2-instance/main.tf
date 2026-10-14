@@ -9,6 +9,12 @@ resource "aws_instance" "monitoring-alerting-server" {
   vpc_security_group_ids = [ var.monitoring-and-alerting-sg ]
   key_name = var.monitoring-and-alerting-keyname
   iam_instance_profile = var.monitoring-and-alerting-instance-profile
+  root_block_device {
+    volume_size = 25
+    volume_type = "gp3"
+    delete_on_termination = true
+    encrypted = true
+  }
   tags = {
     Name = "Monitoring and Alerting Server"
     IAC = "Terraform"
