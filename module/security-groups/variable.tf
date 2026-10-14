@@ -3,7 +3,7 @@ variable "vpc-id" {
 }
 
 variable "my-public-ip" {
-  default = "49.37.206.191/32"
+  default = "49.37.206.116/32"
 }
 
 variable "ssh-port" {

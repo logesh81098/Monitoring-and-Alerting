@@ -15,14 +15,6 @@ resource "aws_security_group" "monitoring-and-alerting-sg" {
     description = "Ingress Rule for SSH Port"
   }
 
-  ingress {
-    from_port = var.grafana-port
-    to_port = var.grafana-port
-    protocol = "tcp"
-    cidr_blocks = [ var.my-public-ip ]
-    description = "Ingress Rule for Grafana Port"
-  }
-
   egress {
     from_port = 0
     to_port = 0
